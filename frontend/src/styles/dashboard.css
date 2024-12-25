@@ -1,0 +1,126 @@
+/* General Styles */
+.dashboard-section {
+  background-image: url("/img/language.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  padding: 20px;
+  background-color: rgba(
+    255,
+    255,
+    180,
+    0.8
+  ); /* Yellowish tint for vintage feel */
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  font-family: "Press Start 2P", sans-serif; /* Pixel-inspired font */
+}
+
+/* Dashboard Title */
+.dashboard-title {
+  font-size: 28px;
+  color: #f7d358; /* Soft yellow */
+  text-shadow: 2px 2px 0px #333, -1px -1px 0px #666; /* Retro-style shadow */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  color: #f59b00;
+}
+
+/* Language Progress Section */
+.language-section {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.lesson-item {
+  margin-top: 10px;
+  padding: 10px;
+  color: #df8d00;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Light border around the item */
+  border-radius: 8px; /* Rounded corners */
+  background-color: rgba(255, 255, 255, 0.7); /* Translucent background */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow for depth */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.lesson-item:hover {
+  transform: scale(1.05);
+  background-color: rgba(50, 50, 50, 1); /* Slightly more opaque when hovered */
+}
+
+.lesson-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f7d358;
+}
+
+.lesson-progress {
+  font-size: 14px;
+  color: #b3b3b3;
+}
+
+/* Leaderboard Section */
+.leaderboard-section {
+  width: 28%;
+  background-color: rgba(50, 50, 50, 0.95);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.leaderboard-section h3 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffd700; /* Gold color */
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.leaderboard-item {
+  margin-bottom: 10px;
+  padding: 12px;
+  background-color: rgba(30, 30, 30, 0.9);
+  border: 1px solid #ffd700;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: space-between;
+  font-family: "Press Start 2P", sans-serif;
+}
+
+.leaderboard-item:hover {
+  background-color: rgba(30, 30, 30, 1);
+}
+
+.leaderboard-item .username {
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.leaderboard-item .score {
+  color: #f7d358;
+  font-size: 16px;
+}
+
+/* Retro Font for the Whole App */
+body,
+button,
+input,
+.dashboard-title,
+.language-section h3,
+.lesson-title,
+.leaderboard-section h3,
+.leaderboard-item .username {
+  font-family: "Press Start 2P", sans-serif;
+  text-transform: uppercase;
+}
