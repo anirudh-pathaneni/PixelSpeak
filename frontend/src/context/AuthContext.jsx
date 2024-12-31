@@ -1,6 +1,4 @@
-// context/AuthContext.js
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 const AuthContext = createContext({});
 
@@ -10,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check if user info exists in localStorage
-    const userInfo = localStorage.getItem('userInfo');
+    const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       setUser(JSON.parse(userInfo));
     }
@@ -18,36 +16,60 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const { data } = await axios.post('/api/users/login', { email, password });
+    const response = await fetch("/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Invalid credentials");
+    }
+
+    const data = await response.json();
     setUser(data.user);
-    localStorage.setItem('userInfo', JSON.stringify(data.user));
+    localStorage.setItem("userInfo", JSON.stringify(data.user));
     return data;
   };
 
   const signup = async (username, email, password) => {
-    const { data } = await axios.post('/api/users/register', {
-      username,
-      email,
-      password,
+    const response = await fetch("/api/users/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, email, password }),
     });
+
+    if (!response.ok) {
+      throw new Error("Signup failed");
+    }
+
+    const data = await response.json();
     setUser(data.user);
-    localStorage.setItem('userInfo', JSON.stringify(data.user));
+    localStorage.setItem("userInfo", JSON.stringify(data.user));
     return data;
   };
 
   const logout = async () => {
-    try {
-      await axios.post('/api/users/logout');
-      setUser(null);
-      localStorage.removeItem('userInfo');
-      window.location.reload();
-    } catch (error) {
-      console.error('Logout error:', error);
+    const response = await fetch("/api/users/logout/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Logout failed");
+      return;
     }
+
+    setUser(null);
+    localStorage.removeItem("userInfo");
+    window.location.reload();
   };
-  
-  
-  
 
   return (
     <AuthContext.Provider value={{ user, login, signup, logout, loading }}>

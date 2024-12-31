@@ -1,24 +1,35 @@
 import { Link } from 'react-router-dom';
 import '../styles/header.css';
-import axios from 'axios';
 import { useAuth } from '../context/AuthContext'; // Import useAuth hook
+
 export default function Header({ isLoggedIn }) {
+  const { setUser } = useAuth(); // Assuming the context provides setUser for managing the auth state
 
   const logout = async () => {
     try {
-      await axios.post('/api/users/logout');
-      setUser(null);
-      localStorage.removeItem('userInfo');
-      window.location.reload();
+      const response = await fetch('/api/users/logout/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+
+      setUser(null); // Clear the user context
+      localStorage.removeItem('userInfo'); // Remove user info from local storage
+      window.location.reload(); // Reload the page to reflect the changes
     } catch (error) {
       console.error('Logout error:', error);
     }
   };
-  
 
   const handleLogout = async () => {
     await logout();
   };
+
   return (
     <header className='header'>
       <svg className="title-img" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

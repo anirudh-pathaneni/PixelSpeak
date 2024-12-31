@@ -1,33 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import '../styles/authpage.css';
+import React, { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import "../styles/authpage.css";
 
 export default function AuthPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const initialMode = searchParams.get('mode') === 'signup' ? false : true;
+  const initialMode = searchParams.get("mode") === "signup" ? false : true;
 
   const [isLogin, setIsLogin] = useState(initialMode);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
+    username: "",
+    email: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const toggleAuthMode = () => {
-    setIsLogin(prevIsLogin => !prevIsLogin);
-    setError('');
+    setIsLogin((prevIsLogin) => !prevIsLogin);
+    setError("");
   };
 
   const handleLoginSubmit = async (event) => {
@@ -36,15 +35,28 @@ export default function AuthPage() {
     setError('');
 
     try {
-      const { data } = await axios.post('/api/users/login', {
-        email: formData.email,
-        password: formData.password
+      const response = await fetch('/api/users/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       });
 
-      localStorage.setItem('userInfo', JSON.stringify(data.user));
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      // Save user info to localStorage
+      localStorage.setItem('userInfo', JSON.stringify(data));
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred during login');
+      console.error('Login error:', err);
+      setError(err.message || 'An error occurred during login');
     } finally {
       setLoading(false);
     }
@@ -56,29 +68,42 @@ export default function AuthPage() {
     setError('');
 
     try {
-      const { data } = await axios.post('/api/users/register', {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password
+      const response = await fetch('/api/users/signup/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password
+        }),
       });
 
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred during registration');
+      }
+
+      // Save user info to localStorage
       localStorage.setItem('userInfo', JSON.stringify(data.user));
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred during registration');
+      setError(err.message || 'An error occurred during registration');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    setIsLogin(searchParams.get('mode') !== 'signup');
+    setIsLogin(searchParams.get("mode") !== "signup");
   }, [searchParams]);
 
   return (
-    <div className='auth-page-container'>
+    <div className="auth-page-container">
       <div className="auth-page">
-        <h2>{isLogin ? 'Log in to PixelSpeak' : 'Sign up for PixelSpeak'}</h2>
+        <h2>{isLogin ? "Log in to PixelSpeak" : "Sign up for PixelSpeak"}</h2>
 
         {error && <div className="error-message">{error}</div>}
 
@@ -105,7 +130,7 @@ export default function AuthPage() {
               />
             </label>
             <button type="submit" disabled={loading}>
-              {loading ? 'Logging in...' : 'Log in'}
+              {loading ? "Logging in..." : "Log in"}
             </button>
           </form>
         ) : (
@@ -141,15 +166,15 @@ export default function AuthPage() {
               />
             </label>
             <button type="submit" disabled={loading}>
-              {loading ? 'Signing up...' : 'Sign up'}
+              {loading ? "Signing up..." : "Sign up"}
             </button>
           </form>
         )}
 
         <p className="toggle-auth">
-          {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}
+          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
           <button onClick={toggleAuthMode} className="toggle-button">
-            {isLogin ? 'Sign up' : 'Log in'}
+            {isLogin ? "Sign up" : "Log in"}
           </button>
         </p>
       </div>
