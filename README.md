@@ -110,7 +110,7 @@ The frontend is developed using **React** and utilizes **React Router** for navi
 ### Backend Setup
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/pixelspeak.git
+    git clone https://github.com/anirudh-pathaneni/PixelSpeak.git
     cd pixelspeak
     ```
 2. Install dependencies:
